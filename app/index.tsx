@@ -1,12 +1,23 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
-import { Alert, Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
+import products from '../assets/data/products.json';
+
+type Product = {
+  Name: string;
+  "List Price": number;
+  "Updated Date": string;
+}
+
+type ProductDict = {
+  [barcode: string]: Product;
+}
 
 export default function Index() {
   const theme = useTheme();
   const [permission, requestPermission] = useCameraPermissions();
-  const [scanned, setScanned] = useState(false);
+  const [hasScanned, setHasScanned] = useState(false);
 
   const vjandepLogo = require('../assets/images/vjandep-logo.png');
   const gasaLogo = require('../assets/images/gasa-logo.png');
@@ -22,18 +33,23 @@ export default function Index() {
     return <View />;
   };
 
-  if (!permission.granted) {
-    return (
-      <View>
-        <Text>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission}>Grand Permission</Button>
-      </View>
-    )
-  };
+  // if (!permission.granted) {
+  //   return (
+  //     <View>
+  //       <Text>We need your permission to show the camera</Text>
+  //       <Button onPress={requestPermission}>Grand Permission</Button>
+  //     </View>
+  //   )
+  // };
 
-  const handleBarcodeScanned = ({type, data}: BarcodeScanningResult) => {
-    setScanned(true);
-    Alert.alert('Barcode Scanned!', `Data: ${data}\nType: ${type}`);
+  const handleBarcodeScanned = (result: BarcodeScanningResult) => {
+    setHasScanned(true);
+
+    const product = (products as ProductDict)[result.data];
+
+    if (product) {
+
+    }  
   };
 
   return (
@@ -49,13 +65,12 @@ export default function Index() {
         <Image source={vviLogo} style={styles.vviLogo} resizeMode='contain' />
 
         <Text variant='headlineLarge' style={{fontWeight: 'bold'}}>VVI BARCODE PRICE CHECKER</Text>
-
+        
         <CameraView 
           facing={'back'} 
           style={styles.camera} 
           barcodeScannerSettings={{
             barcodeTypes: [
-              "qr",
               "ean13",
               "ean8", 
               "upc_a", 
@@ -63,17 +78,23 @@ export default function Index() {
               "code128"
             ]
           }}
-          onBarcodeScanned={scanned ? undefined : handleBarcodeScanned}
+          onBarcodeScanned={hasScanned ? undefined : handleBarcodeScanned}
         />
+        {hasScanned && (
+          <Button 
+            mode={"contained-tonal"} 
+            onPress={() => setHasScanned(false)}
+            style={{alignSelf: 'center'}}
+          >Scan</Button>
+        )}
+
         <Text variant='displaySmall' style={{fontWeight: 'bold', color: '#FF7F7F'}}>RESULTS</Text>
 
         <View style={styles.resultContainer}>
-          <Text variant='headlineSmall' style={{fontWeight: 'bold'}}>DATA:</Text> 
+          <Text variant='headlineSmall' style={{fontWeight: 'bold'}}>NAME: {}</Text> 
           <Text variant='headlineSmall' style={{fontWeight: 'bold'}}>PRICE:</Text> 
         </View> 
-        {/* {scanned && (
-            <Button mode={"outlined"} onPress={() => setScanned(false)}>Scan Again</Button>
-        )} */}
+        
       </View>
     </>
   ) 
@@ -91,7 +112,7 @@ const styles = StyleSheet.create({
     gap: 3,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 30
+    marginTop: 10
   },
   logo: {
     width: 70,

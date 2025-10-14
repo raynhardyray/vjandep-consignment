@@ -1,5 +1,4 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Tabs } from "expo-router";
+import { Slot } from "expo-router";
 import { useColorScheme } from "react-native";
 import { MD3DarkTheme, MD3LightTheme, PaperProvider } from "react-native-paper";
 
@@ -10,30 +9,7 @@ export default function RootLayout() {
 
   return (
     <PaperProvider theme={theme}>
-      <Tabs
-        screenOptions={{
-          headerShown: false,
-        }}
-      >
-            <Tabs.Screen 
-                name="index"
-                options={{
-                    title: 'Home',
-                    tabBarIcon: ({color, size}) => (
-                      <MaterialCommunityIcons name="home" size={size} color={color} />
-                    )
-                }}
-            />
-            <Tabs.Screen 
-                name="scannedpages"
-                options={{
-                    title: 'Scanned',
-                    tabBarIcon: ({color, size}) => (
-                      <MaterialCommunityIcons name="camera-document" size={size} color={color} />
-                    )
-                }}
-            />
-        </Tabs>
+        <Slot />
     </PaperProvider>
   )
 }
