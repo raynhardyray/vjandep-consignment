@@ -2,7 +2,7 @@ import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-ca
 import { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
-import products from '../assets/data/products.json';
+import rawProducts from '../assets/data/products.json';
 
 type Product = {
   Name: string;
@@ -18,6 +18,7 @@ export default function Index() {
   const theme = useTheme();
   const [permission, requestPermission] = useCameraPermissions();
   const [hasScanned, setHasScanned] = useState(false);
+  const [scannedProduct, setScannedProduct] = useState<Product | null>(null);
 
   const vjandepLogo = require('../assets/images/vjandep-logo.png');
   const gasaLogo = require('../assets/images/gasa-logo.png');
@@ -33,23 +34,25 @@ export default function Index() {
     return <View />;
   };
 
-  // if (!permission.granted) {
-  //   return (
-  //     <View>
-  //       <Text>We need your permission to show the camera</Text>
-  //       <Button onPress={requestPermission}>Grand Permission</Button>
-  //     </View>
-  //   )
-  // };
+  if (!permission.granted) {
+    return (
+      <View>
+        <Text>We need your permission to show the camera</Text>
+        <Button onPress={requestPermission}>Grand Permission</Button>
+      </View>
+    )
+  };
 
   const handleBarcodeScanned = (result: BarcodeScanningResult) => {
     setHasScanned(true);
 
-    const product = (products as ProductDict)[result.data];
+    const product = (rawProducts as ProductDict)[result.data];
 
     if (product) {
-
-    }  
+      setScannedProduct(product);
+    } else {
+      
+    }
   };
 
   return (
@@ -64,7 +67,7 @@ export default function Index() {
         
         <Image source={vviLogo} style={styles.vviLogo} resizeMode='contain' />
 
-        <Text variant='headlineLarge' style={{fontWeight: 'bold'}}>VVI BARCODE PRICE CHECKER</Text>
+        <Text variant='headlineLarge' style={{fontWeight: 'bold', marginBottom: 10}}>VVI BARCODE PRICE CHECKER</Text>
         
         <CameraView 
           facing={'back'} 
@@ -80,21 +83,25 @@ export default function Index() {
           }}
           onBarcodeScanned={hasScanned ? undefined : handleBarcodeScanned}
         />
-        {hasScanned && (
-          <Button 
+        <Button 
             mode={"contained-tonal"} 
             onPress={() => setHasScanned(false)}
-            style={{alignSelf: 'center'}}
-          >Scan</Button>
-        )}
+            style={{alignSelf: 'center',}}
+            contentStyle={{height: 50, paddingHorizontal: 5 }}
+            labelStyle={{fontSize: 20,}}
+            disabled={!hasScanned}
+        >SCAN</Button>
 
-        <Text variant='displaySmall' style={{fontWeight: 'bold', color: '#FF7F7F'}}>RESULTS</Text>
 
         <View style={styles.resultContainer}>
-          <Text variant='headlineSmall' style={{fontWeight: 'bold'}}>NAME: {}</Text> 
-          <Text variant='headlineSmall' style={{fontWeight: 'bold'}}>PRICE:</Text> 
+        <Text variant='headlineMedium' style={styles.resultLabel}>NAME:</Text> 
+        <Text variant='headlineSmall' style={styles.resultValue}>{scannedProduct ? scannedProduct.Name : ''}</Text> 
+        </View>
+
+        <View style={styles.resultContainer}>
+          <Text variant='headlineMedium' style={styles.resultLabel}>PRICE:</Text> 
+          <Text variant='headlineSmall' style={styles.resultValue}>₱{scannedProduct ? scannedProduct['List Price'].toFixed(2) : ''}</Text> 
         </View> 
-        
       </View>
     </>
   ) 
@@ -136,7 +143,17 @@ const styles = StyleSheet.create({
   resultContainer: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    flexDirection: 'row',
     width: '100%',
-    paddingLeft: 20,
+    paddingHorizontal: 30,
+    paddingVertical: 5,
+    gap: 10
   },
+  resultLabel: {
+    fontWeight: 'bold',
+  },
+  resultValue: {
+    flexShrink: 1,
+    fontSize: 30
+  }
 });
