@@ -1,19 +1,10 @@
+import { Product, ProductDict } from '@/src/types/ProductType';
+import rawProducts from '@assets/data/products.json';
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
 import { Image, Linking, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, Text, useTheme } from 'react-native-paper';
-import rawProducts from '../assets/data/products.json';
-
-type Product = {
-  Name: string;
-  "List Price": number;
-  "Updated Date": string;
-}
-
-type ProductDict = {
-  [barcode: string]: Product;
-}
 
 export default function Index() {
   const theme = useTheme();
@@ -21,15 +12,15 @@ export default function Index() {
   const [hasScanned, setHasScanned] = useState(false);
   const [scannedProduct, setScannedProduct] = useState<Product | null>(null);
 
-  const vjandepLogo = require('../assets/images/vjandep-logo.png');
-  const gasaLogo = require('../assets/images/gasa-logo.png');
-  const baayLogo = require('../assets/images/baay-logo.png');
+  const vjandepLogo = require('@assets/images/vjandep-logo.png');
+  const gasaLogo = require('@assets/images/gasa-logo.png');
+  const baayLogo = require('@assets/images/baay-logo.png');
   const samuelLogo = theme.dark
-    ? require('../assets/images/samuel-logo-dark.png')
-    : require('../assets/images/samuel-logo-light.png');
+    ? require('@assets/images/samuel-logo-dark.png')
+    : require('@assets/images/samuel-logo-light.png');
   const vviLogo = theme.dark
-    ? require('../assets/images/vvi-logo-dark.png')
-    : require('../assets/images/vvi-logo-light.png');
+    ? require('@assets/images/vvi-logo-dark.png')
+    : require('@assets/images/vvi-logo-light.png');
 
   const handlePermissionRequest = async () => {
     const result = await requestPermission();
