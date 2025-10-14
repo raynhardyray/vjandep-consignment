@@ -1,4 +1,5 @@
 import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
+import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Button, Text, useTheme } from 'react-native-paper';
@@ -50,8 +51,10 @@ export default function Index() {
 
     if (product) {
       setScannedProduct(product);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
     } else {
-      
+      setScannedProduct(null);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
   };
 
@@ -95,12 +98,12 @@ export default function Index() {
 
         <View style={styles.resultContainer}>
         <Text variant='headlineMedium' style={styles.resultLabel}>NAME:</Text> 
-        <Text variant='headlineSmall' style={styles.resultValue}>{scannedProduct ? scannedProduct.Name : ''}</Text> 
+        <Text variant='headlineSmall' style={styles.resultValue}>{scannedProduct ? scannedProduct.Name : 'NOT FOUND'}</Text> 
         </View>
 
         <View style={styles.resultContainer}>
           <Text variant='headlineMedium' style={styles.resultLabel}>PRICE:</Text> 
-          <Text variant='headlineSmall' style={styles.resultValue}>₱{scannedProduct ? scannedProduct['List Price'].toFixed(2) : ''}</Text> 
+          <Text variant='headlineSmall' style={styles.resultValue}>{scannedProduct ? `₱${scannedProduct['List Price'].toFixed(2)}` : 'NOT FOUND'}</Text> 
         </View> 
       </View>
     </>
