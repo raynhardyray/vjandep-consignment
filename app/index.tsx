@@ -32,7 +32,7 @@ export default function Index() {
 
   if (!permission) {
     return (
-      <View>
+      <View style={[styles.container, { backgroundColor: theme.colors.background}]}>
         <ActivityIndicator animating={true} size="large" />
       </View>
     )
@@ -40,7 +40,7 @@ export default function Index() {
 
   if (!permission.granted) {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, { backgroundColor: theme.colors.background}]}>
         <Text>We need your permission to show the camera</Text>
         <Button onPress={handlePermissionRequest}>Grant Permission</Button>
       </View>
@@ -84,7 +84,6 @@ export default function Index() {
             "upc_a", 
             "upc_e", 
             "code128",
-            "qr"
           ]
         }}
         onBarcodeScanned={hasScanned ? undefined : handleBarcodeScanned}
