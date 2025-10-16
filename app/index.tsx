@@ -1,4 +1,3 @@
-import { Product, ProductDict } from '@/src/types/ProductType';
 import rawProducts from '@assets/data/products.json';
 import { BarcodeScanningResult } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
@@ -11,11 +10,12 @@ import { CameraScanner } from '@/src/components/CameraScanner';
 import { HeaderSection } from '@/src/components/HeaderSection';
 import { ScanButton } from '@/src/components/ScanButton';
 import { ResultCard } from '@/src/components/ResultCard';
-import { formatProductPrice, getProductName } from '@/src/utils/barcodeUtils';
+import { formatProductPrice, getProductName, transformToBarcodeType } from '@/src/utils/barcodeUtils';
+import { ProductType } from '@/src/types/Types';
 
 export default function Index() {
     const [hasScanned, setHasScanned] = useState(false);
-    const [scannedProduct, setScannedProduct] = useState<Product | null>(null);
+    const [scannedProduct, setScannedProduct] = useState<ProductType | null>(null);
 
     const theme = useTheme();
     const {permission, handlePermissionRequest} = useCameraPermissionHandler();
@@ -40,7 +40,8 @@ export default function Index() {
     const handleBarcodeScanned = (result: BarcodeScanningResult) => {
         setHasScanned(true);
 
-        const product = (rawProducts as ProductDict)[result.data];
+        const barcodedProducts = transformToBarcodeType(rawProducts)
+        const product = barcodedProducts[result.data];
 
         if (product) {
             setScannedProduct(product);
@@ -53,7 +54,6 @@ export default function Index() {
 
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.background}]}>
-
         <HeaderSection />
         
         <CameraScanner isScanned={hasScanned} onBarcodeScanned={handleBarcodeScanned} />
