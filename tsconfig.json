@@ -4,10 +4,13 @@
     "baseUrl": ".",
     "strict": true,
     "paths": {
-      "@/*": [
-        "./*"
-      ],
-      "@assets/*" : ["assets/*"]
+      "@/*": ["./*"],
+      "@assets/*": ["assets/*"],
+      "@components/*": ["src/components/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"],
+      "@constants/*": ["src/constants/*"]
     },
     "resolveJsonModule": true,
     "esModuleInterop": true
