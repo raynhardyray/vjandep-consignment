@@ -1,4 +1,4 @@
-import { BarcodeDict, ProductType, RawProductType } from "../types/Types";
+import { BarcodeDict, ProductType, RawProductType } from "@/src/types/Types";
 
 export function formatProductPrice(product: ProductType | null): string {
   return product ? `₱${product.price.toFixed(2)}` : 'NOT FOUND';
@@ -11,7 +11,7 @@ export function getProductName(product: ProductType | null): string {
 export function transformToBarcodeType(rawProducts: RawProductType): BarcodeDict {
     return Object.fromEntries(
         Object.entries(rawProducts).map(([barcode, data]) => [
-            parseInt(barcode),
+            barcode,
             {
                 name: data['Name'],
                 price: data['List Price'],

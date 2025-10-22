@@ -12,6 +12,7 @@ import { ScanButton } from '@/src/components/ScanButton';
 import { ResultCard } from '@/src/components/ResultCard';
 import { formatProductPrice, getProductName, transformToBarcodeType } from '@/src/utils/barcodeUtils';
 import { ProductType } from '@/src/types/Types';
+import useConnectivityHandler from '@/src/hooks/useConnectivityHandler';
 
 export default function Index() {
     const [hasScanned, setHasScanned] = useState(false);
@@ -19,6 +20,7 @@ export default function Index() {
 
     const theme = useTheme();
     const {permission, handlePermissionRequest} = useCameraPermissionHandler();
+    const isConnected = useConnectivityHandler();
 
     if (!permission) {
         return (
@@ -35,6 +37,13 @@ export default function Index() {
             <Button onPress={handlePermissionRequest}>Grant Permission</Button>
         </View>
       )
+    }
+
+    if (isConnected) {
+      // implement google sheet online fetch & convert to Barcode JSON format
+      console.log("connected");
+    } else {
+      // implement offline data read: products.json
     }
 
     const handleBarcodeScanned = (result: BarcodeScanningResult) => {
