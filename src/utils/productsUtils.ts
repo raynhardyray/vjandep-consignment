@@ -1,5 +1,6 @@
 import * as Papa from 'papaparse';
 import { RawProductType } from '@/src/types/Types';
+import rawProductsData from "@/assets/data/products.json";
 
 const rawProductsCSV = process.env.EXPO_PUBLIC_SHEET_URL;
 
@@ -17,8 +18,8 @@ export async function fetchProduct() {
 
         return rawProducts;
     } catch (error) {
-        console.error('Error fetching product data: ', error);
-        return null;
+        console.error('ERROR FETCHING DATA! using existing data\n', error);
+        return rawProductsData;
     }
 };
 

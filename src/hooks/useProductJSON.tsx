@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { RawProductType } from "@/src/types/Types";
 import useConnectivityHandler from "@/src/hooks/useConnectivityHandler";
 import { fetchProduct } from "@/src/utils/productsUtils";
-import rawProducts from "@/assets/data/products.json";
+import rawProducts from '../../assets/data/products.json';
 
 export default function useProductJSON() {
     const [productJSON, setProductJSON] = useState<RawProductType>();
