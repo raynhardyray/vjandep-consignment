@@ -12,6 +12,7 @@ import { ResultCard } from '@/src/components/ResultCard';
 import { formatProductPrice, getProductName, transformToBarcodeType } from '@/src/utils/barcodeUtils';
 import { ProductType } from '@/src/types/Types';
 import useProductJSON from '@/src/hooks/useProductJSON';
+import ConnectivitySnackbar from '@/src/components/ConnectivitySnackbar';
 
 export default function Index() {
     const [hasScanned, setHasScanned] = useState(false);
@@ -63,6 +64,8 @@ export default function Index() {
 
         <ResultCard label="NAME:" value={getProductName(scannedProduct)} />
         <ResultCard label="PRICE:" value={formatProductPrice(scannedProduct)} />
+
+        <ConnectivitySnackbar />
       </View>
     );
 };
