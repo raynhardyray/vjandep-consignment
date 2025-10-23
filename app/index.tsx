@@ -1,4 +1,3 @@
-import rawProducts from '@assets/data/products.json';
 import { BarcodeScanningResult } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { useState } from 'react';
@@ -12,7 +11,7 @@ import { ScanButton } from '@/src/components/ScanButton';
 import { ResultCard } from '@/src/components/ResultCard';
 import { formatProductPrice, getProductName, transformToBarcodeType } from '@/src/utils/barcodeUtils';
 import { ProductType } from '@/src/types/Types';
-import useConnectivityHandler from '@/src/hooks/useConnectivityHandler';
+import useProductJSON from '@/src/hooks/useProductJSON';
 
 export default function Index() {
     const [hasScanned, setHasScanned] = useState(false);
@@ -20,7 +19,7 @@ export default function Index() {
 
     const theme = useTheme();
     const {permission, handlePermissionRequest} = useCameraPermissionHandler();
-    const isConnected = useConnectivityHandler();
+    const productJSON = useProductJSON();
 
     if (!permission) {
         return (
@@ -39,17 +38,10 @@ export default function Index() {
       )
     }
 
-    if (isConnected) {
-      // implement google sheet online fetch & convert to Barcode JSON format
-      console.log("connected");
-    } else {
-      // implement offline data read: products.json
-    }
-
     const handleBarcodeScanned = (result: BarcodeScanningResult) => {
         setHasScanned(true);
 
-        const barcodedProducts = transformToBarcodeType(rawProducts)
+        const barcodedProducts = transformToBarcodeType(productJSON!)
         const product = barcodedProducts[result.data];
 
         if (product) {
