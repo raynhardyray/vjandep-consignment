@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { RawProductType } from "@/src/types/Types";
 import useConnectivityHandler from "@/src/hooks/useConnectivityHandler";
-import { fetchProduct } from "@/src/utils/productsUtils";
-import rawProducts from '../../assets/data/products.json';
+// import { fetchProduct } from "@/src/utils/productsUtils"; // disabled for now
+import rawProducts from '@assets/data/products.json';
 
 export default function useProductJSON() {
     const [productJSON, setProductJSON] = useState<RawProductType>();
@@ -11,8 +11,9 @@ export default function useProductJSON() {
     useEffect(() => {
         async function loadProductData() {
             if (isConnected) {
-                const fetchedProducts = await fetchProduct();
-                setProductJSON(fetchedProducts!);
+                // const fetchedProducts = await fetchProduct(); // disabled for now
+                // setProductJSON(fetchedProducts!); // disabled for now
+                setProductJSON(rawProducts); //temporary 
             } else {
                 setProductJSON(rawProducts);
             };

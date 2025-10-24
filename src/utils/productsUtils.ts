@@ -1,6 +1,6 @@
 import * as Papa from 'papaparse';
 import { RawProductType } from '@/src/types/Types';
-import rawProductsData from "@/assets/data/products.json";
+import rawProductsData from '@assets/data/products.json';
 
 const rawProductsCSV = process.env.EXPO_PUBLIC_SHEET_URL;
 
